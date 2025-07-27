@@ -1,18 +1,16 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 
-module.exports = mongoose.connect("mongodb://127.0.0.1:27017/db")
-.then(() => {
-  console.log("Connected to MongoDB");
-})
-.catch((err) => {
-  console.error("Error connecting to MongoDB:", err);
-});
+async function connectDB() {
+  console.log("⏳ Trying to connect to MongoDB...");
 
-  // .connect("mongodb://127.0.0.1:27017/db")
-  // .then(() => {
-  //   console.log("Connected to MongoDB");
-  // })
-  // .catch((err) => {
-  //   console.error("Error connecting to MongoDB:", err);
-  // });
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB Atlas is connected");
+  } catch (err) {
+    console.error("❌ MongoDB Atlas is NOT connected:", err.message);
+    process.exit(1); // exit the app if DB fails
+  }
+}
 
+module.exports = connectDB;
